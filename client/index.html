@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grandstream Finder | Solutions for Success</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gs-blue { background-color: #003366; }
+        .gs-text-blue { color: #003366; }
+        .card-img { height: 160px; object-fit: contain; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    
+    <header class="gs-blue text-white shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <img src="https://www.grandstream.com/hs-fs/hubfs/raw_assets/public/Grandstream_Feb_2021/images/logo-grandstream-low-web.png?width=450&height=153&name=logo-grandstream-low-web.png" alt="Grandstream" class="h-8">
+            <span class="text-sm font-light tracking-widest hidden md:block">CONNECTING THE WORLD</span>
+        </div>
+    </header>
+
+    <div class="container mx-auto flex flex-col md:flex-row gap-8 p-6">
+        
+        <aside class="w-full md:w-72 bg-white p-6 rounded border border-gray-200 h-fit sticky top-6">
+            <h2 class="text-xl font-bold mb-6 gs-text-blue uppercase text-sm tracking-tight">Seleccionar Filtros</h2>
+
+            <section class="mb-8">
+                <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Buscar Modelo</h3>
+                <input type="text" id="busqueda" placeholder="Ej: GRP2615" 
+                       class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-900"
+                       oninput="filtrar()">
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Conectividad</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" id="wifi" class="form-checkbox h-4 w-4 text-blue-800" onchange="filtrar()">
+                        <span class="ml-3 text-gray-700 group-hover:text-blue-900">Wi-Fi Integrado</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" id="bluetooth" class="form-checkbox h-4 w-4 text-blue-800" onchange="filtrar()">
+                        <span class="ml-3 text-gray-700 group-hover:text-blue-900">Bluetooth</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" id="poe" class="form-checkbox h-4 w-4 text-blue-800" onchange="filtrar()">
+                        <span class="ml-3 text-gray-700 group-hover:text-blue-900">Soporte PoE</span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Pantalla</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center p-2 rounded hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="screen" value="all" checked onchange="filtrar()">
+                        <span class="ml-3 text-gray-700">Todas</span>
+                    </label>
+                    <label class="flex items-center p-2 rounded hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="screen" value="multicolor" onchange="filtrar()">
+                        <span class="ml-3 text-gray-700">Color LCD</span>
+                    </label>
+                    <label class="flex items-center p-2 rounded hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="screen" value="monocromatica" onchange="filtrar()">
+                        <span class="ml-3 text-gray-700">Monocromática</span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h3 class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Cuentas SIP (Mín)</h3>
+                <div class="px-2">
+                    <input type="range" id="sip" min="2" max="16" step="2" value="2" 
+                           class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-900"
+                           oninput="this.nextElementSibling.value = this.value; filtrar()">
+                    <output class="block text-center mt-2 font-bold gs-text-blue text-lg">2</output>
+                </div>
+            </section>
+
+            <button onclick="window.location.reload()" class="w-full py-3 text-xs font-bold uppercase tracking-tighter border border-gray-300 rounded hover:bg-gray-50 transition">Resetear</button>
+        </aside>
+
+        <main id="lista-telefonos" class="flex-1 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 items-start">
+        </main>
+    </div>
+
+    <script>
+        let phonesData = [];
+
+        async function init() {
+            try {
+                const res = await fetch('/api/phones');
+                phonesData = await res.json();
+                render(phonesData);
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+            }
+        }
+
+        function render(items) {
+            const container = document.getElementById('lista-telefonos');
+            if(items.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-20 text-center text-gray-400 font-light italic">No se hallaron modelos con estos criterios.</div>`;
+                return;
+            }
+
+            container.innerHTML = items.map(tel => `
+                <div class="bg-white rounded shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-all duration-300 group h-auto">
+                    <div class="p-4 flex justify-center bg-gray-50 h-40 items-center">
+                        <img src="${tel.imageUrl || 'https://via.placeholder.com/150'}" 
+                             alt="${tel.model}" 
+                             class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform">
+                    </div>
+                    <div class="p-5 border-t border-gray-100 flex flex-col">
+                        <div class="text-[9px] font-bold text-blue-900 uppercase tracking-widest mb-1">${tel.category || 'IP Phone'}</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">${tel.model}</h3>
+                        <p class="text-xs text-gray-500 mb-4 italic">${tel.description || 'Terminal Grandstream.'}</p>
+                        <div class="flex flex-wrap gap-1 pt-3 border-t border-gray-50">
+                            <span class="text-[8px] px-2 py-0.5 bg-blue-50 text-blue-700 font-bold rounded uppercase font-mono italic tracking-tighter">SIP x${tel.sipAccounts || 0}</span>
+                            ${tel.wifi ? '<span class="text-[8px] px-2 py-0.5 bg-green-50 text-green-700 font-bold rounded uppercase">Wi-Fi</span>' : ''}
+                            ${tel.poe ? '<span class="text-[8px] px-2 py-0.5 bg-amber-50 text-amber-700 font-bold rounded uppercase">PoE</span>' : ''}
+                            ${tel.bluetooth ? '<span class="text-[8px] px-2 py-0.5 bg-indigo-50 text-indigo-700 font-bold rounded uppercase">BT</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filtrar() {
+    // 1. Capturar valores del DOM
+    const busqueda = document.getElementById('busqueda').value.toLowerCase().trim();
+    const wifi = document.getElementById('wifi').checked;
+    const bluetooth = document.getElementById('bluetooth').checked;
+    const poe = document.getElementById('poe').checked;
+    const sip = parseInt(document.getElementById('sip').value);
+    
+    // Capturar Radio Button seleccionado
+    const radioSeleccionado = document.querySelector('input[name="screen"]:checked');
+    const screenValue = radioSeleccionado ? radioSeleccionado.value : 'all';
+
+    // 2. Filtrar array global
+    const filtered = phonesData.filter(t => {
+        // Filtro de Texto
+        const matchTexto = t.model.toLowerCase().includes(busqueda) || 
+                           (t.description && t.description.toLowerCase().includes(busqueda));
+        
+        // Filtros de Conectividad (Si el check es true, el dato debe ser true)
+        const matchWifi = !wifi || t.wifi === true;
+        const matchBT = !bluetooth || t.bluetooth === true;
+        const matchPoe = !poe || t.poe === true;
+        
+        // Filtro SIP
+        const matchSIP = (t.sipAccounts || 0) >= sip;
+        
+        // FILTRO DE PANTALLA (Aquí es donde forzamos la coincidencia)
+        // Convertimos el valor de la base de datos a string, minúsculas y quitamos espacios
+        const dbScreenType = String(t.screenType || "").toLowerCase().trim();
+        const matchScreen = (screenValue === 'all') || (dbScreenType === screenValue);
+        
+        return matchTexto && matchWifi && matchBT && matchPoe && matchSIP && matchScreen;
+    });
+
+    render(filtered);
+}
+
+        init();
+    </script>
+</body>
+</html>

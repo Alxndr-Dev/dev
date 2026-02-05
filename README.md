@@ -1,15 +1,45 @@
-# What is this?
+# 📞 Grandstream Product Finder (MERN Stack)
 
-The github.dev web-based editor is a lightweight editing experience that runs entirely in your browser. You can navigate files and source code repositories from GitHub, and make and commit code changes.
+![Grandstream Banner](https://www.grandstream.com/hubfs/Grandstream_Logo_White.svg)
 
-There are two ways to go directly to a VS Code environment in your browser and start coding:
+> **Selector inteligente de terminales IP Grandstream.** Filtra por conectividad, tipo de pantalla y capacidad de cuentas SIP en tiempo real.
 
-* Press the . key on any repository or pull request.
-* Swap `.com` with `.dev` in the URL. For example, this repo https://github.com/github/dev becomes http://github.dev/github/dev
+Este proyecto es una aplicación **Full-Stack** diseñada para ayudar a integradores y preventas a encontrar el teléfono ideal dentro del ecosistema de Grandstream.
 
-Preview the gif below to get a quick demo of github.dev in action.
+---
 
-![github dev](https://user-images.githubusercontent.com/856858/130119109-4769f2d7-9027-4bc4-a38c-10f297499e8f.gif)
+## 🚀 Características
 
-# Why?
-It’s a quick way to edit and navigate code. It's especially useful if you want to edit multiple files at a time or take advantage of all the powerful code editing features of Visual Studio Code when making a quick change. For more information, see our [documentation](https://github.co/codespaces-editor-help).
+- 🔍 **Búsqueda en tiempo real**: Filtra por modelo o descripción.
+- 📡 **Filtros avanzados**:
+  - **Conectividad**: Wi-Fi, Bluetooth y soporte PoE.
+  - **Pantalla**: Selección entre pantallas a Color (Multicolor) o Monocromáticas.
+  - **Capacidad**: Slider dinámico para filtrar por número mínimo de cuentas SIP.
+- 📱 **Diseño Responsivo**: Interfaz moderna construida con **Tailwind CSS** siguiendo la línea de diseño oficial de Grandstream.
+- ⚡ **Arquitectura Robusta**: Backend en Node.js con persistencia de datos en MongoDB Atlas.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+| Componente | Tecnología |
+| :--- | :--- |
+| **Frontend** | HTML5, Tailwind CSS, JavaScript (Vanilla ES6) |
+| **Backend** | Node.js, Express.js |
+| **Base de Datos** | MongoDB Atlas (Mongoose) |
+| **Despliegue** | GitHub Codespaces / Render |
+
+---
+
+## 📂 Estructura del Proyecto
+
+```text
+├── client/
+│   └── index.html      # Interfaz de usuario y lógica de filtrado
+├── server/
+│   ├── config/db.js    # Conexión a MongoDB
+│   ├── models/         # Esquemas de Mongoose
+│   ├── routes/         # Endpoints de la API
+│   ├── seed.js         # Script para poblar la base de datos
+│   └── server.js       # Punto de entrada de la aplicación
+└── .env                # Variables de entorno (no incluido en el repo)
