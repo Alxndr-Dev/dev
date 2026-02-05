@@ -1,7 +1,7 @@
 # 📞 Grandstream Product Finder (MERN Stack)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Grandstream-Networks/branding/master/logos/Grandstream_Logo_Blue.png" width="400" alt="Grandstream Logo">
+  <img src="https://www.grandstream.com/hs-fs/hubfs/raw_assets/public/Grandstream_Feb_2021/images/logo-grandstream-low-web.png?width=450&height=153&name=logo-grandstream-low-web.png" width="400" alt="Grandstream Logo">
 </p>
 
 > **Selector inteligente de terminales IP Grandstream.** Filtra por conectividad, tipo de pantalla y capacidad de cuentas SIP en tiempo real.
